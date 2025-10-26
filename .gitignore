@@ -1,0 +1,29 @@
+# .gitignore
+
+# .NET/C# Backend
+/backend/bin/
+/backend/obj/
+/backend/*.db  # SQLite database file
+/backend/*.db-journal  # SQLite temporary files
+/backend/.vs/  # Visual Studio temp files
+/backend/*.csproj.user
+/backend/*.suo
+/backend/*.pdb
+
+# Node.js/Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+*.log
+
+# OS and Editor Files
+.DS_Store
+*.swp
+*.swo
+.vscode/
+*.code-workspace
+
+# Environment Files
+/backend/appsettings.json
+.env

@@ -1,0 +1,105 @@
+body {
+  background-color: #1C2526;
+  color: #FFFFFF;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  line-height: 1.6;
+}
+header {
+  background-color: #FF2C55;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+nav ul {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 15px;
+  list-style: none;
+  margin: 0;
+}
+nav a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: bold;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+#home, #newsletter, #stats {
+  text-align: center;
+  padding: 40px 20px;
+}
+#home h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+#signup-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+#signup-form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 200px;
+}
+#signup-form button {
+  padding: 10px 20px;
+  background-color: #FF2C55;
+  border: none;
+  border-radius: 5px;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-weight: bold;
+}
+#signup-form button:hover {
+  background-color: #E0264D;
+}
+#fighters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.fighter-card {
+  background: #333;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+.fighter-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(255, 44, 85, 0.5);
+}
+.fighter-card h3 {
+  margin: 10px 0;
+}
+.fighter-card button {
+  background-color: #FF2C55;
+  border: none;
+  padding: 8px 16px;
+  color: #FFFFFF;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.fighter-card button:hover {
+  background-color: #E0264D;
+}
+@media (max-width: 600px) {
+  nav ul {
+    flex-direction: column;
+    text-align: center;
+  }
+  #signup-form {
+    flex-direction: column;
+    align-items: center;
+  }
+  #signup-form input, #signup-form button {
+    width: 100%;
+    max-width: 300px;
+  }
+}

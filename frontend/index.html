@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UFC Insider Newsletter</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#fighters">Fighters</a></li>
+        <li><a href="#stats">Stats</a></li>
+        <li><a href="#newsletter">Newsletter</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section id="home">
+      <h1>UFC Insider Newsletter</h1>
+      <p>Get the latest UFC fighter stats, fight predictions, and event updates!</p>
+    </section>
+    <section id="newsletter">
+      <h2>Subscribe to Stay in the Octagon</h2>
+      <form id="signup-form">
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+    <section id="fighters">
+      <h2>Fighter Profiles</h2>
+      <!-- Fighter cards populated via JS -->
+    </section>
+    <section id="stats">
+      <h2>Fighter Stats Dashboard</h2>
+      <canvas id="winRatioChart" width="400" height="200"></canvas>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,95 +1,111 @@
-// Fetch fighters from backend (or JSON fallback for GitHub Pages)
-async function fetchFighters() {
-  try {
-    const response = await fetch('http://localhost:5000/api/fighters');
-    if (!response.ok) throw new Error('API fetch failed');
-    const fighters = await response.json();
-    renderFighters(fighters);
-    renderWinRatioChart(fighters);
-  } catch (error) {
-    console.error('Error:', error);
-    // Fallback to static JSON
-    const response = await fetch('data/fighters.json');
-    const fighters = await response.json();
-    renderFighters(fighters);
-    renderWinRatioChart(fighters);
+let allNews = [];
+
+async function fetchNews() {
+  console.log("Fetching latest MMA news with fighter thumbnails...");
+
+  const proxy = "https://corsproxy.io/?";
+
+  const feeds = [
+    "https://www.sherdog.com/rss/news",
+    "https://www.mmamania.com/rss/current",
+    "https://mmajunkie.usatoday.com/feed",
+    "https://www.bjpenn.com/feed",
+    "https://www.bloodyelbow.com/rss",
+    "https://www.onefc.com/feed/"
+  ];
+
+  const newArticles = [];
+
+  for (const url of feeds) {
+    try {
+      const response = await fetch(proxy + encodeURIComponent(url));
+      if (!response.ok) continue;
+
+      const text = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, "text/xml");
+
+      if (doc.querySelector("parsererror")) continue;
+
+      const items = doc.querySelectorAll("item");
+      items.forEach(item => {
+        const title = item.querySelector("title")?.textContent || "No title";
+        const link = item.querySelector("link")?.textContent || "#";
+        const rawDesc = item.querySelector("description")?.textContent || "";
+        const cleanDesc = rawDesc.replace(/<[^>]*>/g, "").trim();
+
+        // BETTER IMAGE DETECTION — grabs fighter photos, event posters, etc.
+        const imageMatch = rawDesc.match(/src=["'](https?:\/\/[^"']+\.(jpg|png|jpeg|webp))["']/i);
+        let image = imageMatch ? imageMatch[1] : "";
+
+        // FALLBACK: Use UFC/Tapology style images from title
+        if (!image) {
+          const fighterName = title.match(/(Conor McGregor|Jon Jones|Dana White|Islam Makhachev|Alex Pereira|Sean O'Malley|Ilia Topuria)/i);
+          if (fighterName) {
+            const name = fighterName[0].toLowerCase().replace(/\s+/g, '-');
+            image = `https://dmxg5wxfqgbkd.cloudfront.net/s3fs-public/styles/news_teaser/public/2024-10/${name}.jpg`;
+          }
+        }
+
+        const pubDate = item.querySelector("pubDate")?.textContent || "";
+        const date = pubDate ? new Date(pubDate).toLocaleDateString() : "Today";
+        const source = new URL(url).hostname.replace("www.", "").split(".")[0].toUpperCase();
+
+        newArticles.push({ title, link, description: cleanDesc, date, source, image });
+      });
+    } catch (e) {
+      // silent
+    }
   }
+
+  allNews = [...newArticles, ...allNews.filter(old => 
+    !newArticles.some(n => n.link === old.link)
+  )].slice(0, 100);
+
+  renderNews(allNews);
 }
 
-// Render fighter cards
-function renderFighters(fighters) {
-  const container = document.getElementById('fighters');
-  container.innerHTML = fighters.map(fighter => `
-    <div class="fighter-card">
-      <h3>${fighter.name}</h3>
-      <p>Record: ${fighter.wins}-${fighter.losses} | Height: ${fighter.height || 'N/A'} | Accuracy: ${(fighter.strikeAccuracy * 100).toFixed(0)}%</p>
-      <button onclick="predictFight(${fighter.id})">Predict Fight</button>
+function searchNews() {
+  const query = document.getElementById("search-bar").value.toLowerCase().trim();
+  if (!query) {
+    renderNews(allNews);
+    return;
+  }
+  const filtered = allNews.filter(item => 
+    item.title.toLowerCase().includes(query) || 
+    item.description.toLowerCase().includes(query) ||
+    item.source.toLowerCase().includes(query)
+  );
+  renderNews(filtered);
+}
+
+function renderNews(news) {
+  const container = document.getElementById('news-feed');
+  if (news.length === 0) {
+    container.innerHTML = `<p style="text-align:center; color:#aaa; padding:5rem;">No articles found. Try another search!</p>`;
+    return;
+  }
+
+  container.innerHTML = news.map(item => `
+    <div class="news-card" onclick="window.open('${item.link}', '_blank')">
+      ${item.image ? `<img src="${item.image}" alt="${item.title}" class="thumb" loading="lazy">` : ''}
+      <h3>
+        <a href="${item.link}" target="_blank" rel="noopener" onclick="event.stopPropagation();">
+          ${item.title}
+        </a>
+      </h3>
+      <p class="preview">
+        ${item.description.substring(0, 130)}${item.description.length > 130 ? '...' : ''}
+      </p>
+      <div class="meta">
+        <span class="source">${item.source}</span>
+        <span class="date">${item.date}</span>
+      </div>
     </div>
   `).join('');
 }
 
-// Win ratio chart
-function renderWinRatioChart(fighters) {
-  const ctx = document.getElementById('winRatioChart')?.getContext('2d');
-  if (!ctx) return;
-
-  const labels = fighters.slice(0, 5).map(f => f.name);
-  const data = fighters.slice(0, 5).map(f => f.wins / (f.wins + f.losses || 1));
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Win Ratio',
-        data,
-        backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'],
-        borderColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: { y: { beginAtZero: true, max: 1 } },
-      responsive: true
-    }
-  });
-}
-
-// Fight predictor
-async function predictFight(fighterId) {
-  try {
-    const fighter = await fetch(`http://localhost:5000/api/fighter/${fighterId}`).then(r => r.json());
-    const opponentId = prompt('Enter opponent ID (e.g., 2):');
-    const opponent = await fetch(`http://localhost:5000/api/fighter/${opponentId}`).then(r => r.json());
-    
-    const fighterWinProb = (fighter.wins / (fighter.wins + fighter.losses) + fighter.strikeAccuracy) / 2;
-    const opponentWinProb = (opponent.wins / (opponent.wins + opponent.losses) + opponent.strikeAccuracy) / 2;
-    
-    alert(`${fighter.name} win prob: ${(fighterWinProb * 100).toFixed(0)}% vs ${opponent.name}: ${(opponentWinProb * 100).toFixed(0)}%`);
-  } catch (error) {
-    alert('Error predicting fight. Try again.');
-  }
-}
-
-// Newsletter form submission
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = e.target.querySelector('input').value;
-  if (/^\S+@\S+\.\S+$/.test(email)) {
-    try {
-      await fetch('http://localhost:5000/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      alert('Subscribed!');
-    } catch (error) {
-      alert('Subscription failed. Try again.');
-    }
-  } else {
-    alert('Invalid email');
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  fetchNews();
+  setInterval(fetchNews, 5 * 60 * 1000);
 });
-
-// Init
-document.addEventListener('DOMContentLoaded', fetchFighters);

@@ -1,8 +1,21 @@
-Kk# UFC Newsletter Website
+# Your MMA Hub
 
-A full-stack UFC newsletter website with live fighter stats and visualizations, built with JavaScript, HTML, CSS, C#, and SQL for my portfolio.
+**Real-time MMA news aggregator** – UFC, ONE Championship, PFL, Bellator & more.
 
-## Progress
-- Initialized repo with `frontend/` and `backend/` folders.
-- Added frontend: HTML/CSS for UFC-themed UI, JavaScript for fighter cards and fight predictor, Chart.js for win ratio visualization.
-- Deployed to GitHub Pages: [https://Blake-BB.github.io/UFC-Newsletter](https://Blake-BB.github.io/UFC-Newsletter)
+Live demo: https://blake-bb.github.io/Your-MMA-Hub
+
+### Features
+- Live headlines from 5 major MMA sources
+- Clean, modern dark theme
+- Mobile-responsive
+- Built with HTML, CSS, vanilla JavaScript
+- Zero-cost RSS + CORS proxy
+
+### Tech Stack
+- Frontend: HTML5, CSS3, JavaScript (ES6+)
+- Hosting: GitHub Pages
+- Data: Public RSS feeds
+
+Work in progress — C# backend + email subscriptions coming next!
+
+Built by Blake[](https://github.com/Blake-BB)

@@ -1,105 +1,192 @@
+/* Your MMA Hub — FINAL PRO DESIGN + FIGHTER THUMBNAILS */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background-color: #1C2526;
-  color: #FFFFFF;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  line-height: 1.6;
+  background: #0a0a0a;
+  color: #f0f0f0;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.7;
+  background-image: radial-gradient(circle at top, #1a1a2e 0%, #0a0a0a 70%);
 }
 header {
-  background-color: #FF2C55;
+  background: linear-gradient(135deg, #ff006e, #ffbe0b);
+  padding: 1.2rem 0;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(255, 0, 110, 0.3);
 }
-nav ul {
+nav {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 15px;
-  list-style: none;
-  margin: 0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
 }
-nav a {
-  color: #FFFFFF;
-  text-decoration: none;
+.logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: 1px;
+}
+.subscribe-btn {
+  background: rgba(255,255,255,0.2);
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
   font-weight: bold;
+  transition: 0.3s;
+  text-decoration: none;
 }
-nav a:hover {
-  text-decoration: underline;
+.subscribe-btn:hover {
+  background: white;
+  color: #ff006e;
 }
-#home, #newsletter, #stats {
+
+main { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
+
+#home {
   text-align: center;
-  padding: 40px 20px;
+  padding: 5rem 1rem;
+  background: url('https://images.unsplash.com/photo-1606744824163-985d3766966e?ixlib=rb-4.0.3&auto=format&fit=crop&q=80') center/cover no-repeat;
+  border-radius: 20px;
+  margin: 2rem 0;
+  position: relative;
+  color: white;
 }
+#home::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7); border-radius: 20px;
+}
+#home > * { position: relative; z-index: 2; }
 #home h1 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
+  font-size: 4.5rem; margin: 0;
+  background: linear-gradient(90deg, #ff006e, #ffbe0b);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
+#home p { font-size: 1.5rem; margin-top: 1rem; opacity: 0.9; }
+
+#newsletter {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #16213e;
+  border-radius: 16px;
+  margin: 3rem 0;
+}
+#newsletter h2 { color: #ffbe0b; font-size: 2rem; margin-bottom: 1rem; }
 #signup-form {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;
 }
 #signup-form input {
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  width: 200px;
+  padding: 1rem 1.5rem; border: none; border-radius: 50px; width: 320px; max-width: 100%;
+  font-size: 1.1rem; background: #0f0f1a; color: white; border: 2px solid #333;
 }
 #signup-form button {
-  padding: 10px 20px;
-  background-color: #FF2C55;
-  border: none;
-  border-radius: 5px;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-weight: bold;
+  padding: 1rem 2.5rem; background: linear-gradient(135deg, #ff006e, #ffbe0b);
+  color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer;
+  font-size: 1.1rem; transition: 0.3s;
 }
 #signup-form button:hover {
-  background-color: #E0264D;
+  transform: scale(1.05); box-shadow: 0 10px  IDEA30px rgba(255, 0, 110, 0.4);
 }
-#fighters {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-.fighter-card {
-  background: #333;
-  padding: 15px;
-  border-radius: 10px;
+
+#search-section {
   text-align: center;
-  transition: transform 0.3s;
+  margin: 2rem 0;
+  padding: 0 1rem;
 }
-.fighter-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(255, 44, 85, 0.5);
+#search-bar {
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border: 2px solid #333;
+  border-radius: 50px;
+  background: #0f0f1a;
+  color: white;
+  outline: none;
+  transition: 0.3s;
 }
-.fighter-card h3 {
-  margin: 10px 0;
+#search-bar:focus {
+  border-color: #ff006e;
+  box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
 }
-.fighter-card button {
-  background-color: #FF2C55;
-  border: none;
-  padding: 8px 16px;
-  color: #FFFFFF;
-  border-radius: 5px;
+
+#news-feed {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+.news-card {
+  background: #16213e;
+  padding: 1.8rem;
+  border-radius: 16px;
+  border-left: 6px solid #ff006e;
+  transition: all 0.4s ease;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
-.fighter-card button:hover {
-  background-color: #E0264D;
+.news-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(255,0,110,0.1), transparent);
+  opacity: 0;
+  transition: 0.4s;
 }
-@media (max-width: 600px) {
-  nav ul {
-    flex-direction: column;
-    text-align: center;
-  }
-  #signup-form {
-    flex-direction: column;
-    align-items: center;
-  }
-  #signup-form input, #signup-form button {
-    width: 100%;
-    max-width: 300px;
-  }
+.news-card:hover::before { opacity: 1; }
+.news-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(255, 0, 110, 0.3);
+}
+.news-card .thumb {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+.news-card h3 a {
+  color: #ff006e;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.news-card h3 a:hover { text-decoration: underline; }
+.news-card .preview {
+  margin: 1rem 0;
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.news-card .meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #888;
+}
+.news-card .source {
+  background: #ff006e;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+.news-card .date { opacity: 0.8; }
+
+footer {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 4rem;
+}
+
+@media (max-width: 768px) {
+  #home h1 { font-size: 3rem; }
+  .news-card .thumb { height: 180px; }
 }
